@@ -5,8 +5,8 @@ import argparse
 import ipaddress
 import random
 
-# Function to perform reverse DNS lookup and print the subnet
-def reverse_dns_lookup(ip, subnet_name):
+# Function to perform reverse DNS lookup
+def reverse_dns_lookup(ip):
     try:
         hostname = socket.gethostbyaddr(ip)[0]
         print(f"Reverse DNS lookup on {ip} returned hostname: {hostname}")
@@ -43,7 +43,7 @@ for cidr in ipaddress.summarize_address_range(start_cidr.network_address, end_ci
     
     for ip in cidr:
         ip_str = str(ip)
-        hostname = reverse_dns_lookup(ip_str, subnet_name)
+        hostname = reverse_dns_lookup(ip_str)
         if hostname:
             full_label = f"{hostname}\n{ip_str}"  # Combine hostname and IP address
             G.add_node(full_label, label=full_label, type="system", subnet=subnet_name)  # Add systems as nodes with labels and subnet attribute
@@ -77,5 +77,5 @@ for cidr in ipaddress.summarize_address_range(start_cidr.network_address, end_ci
         plt.title(f"Network Topology for {subnet_name} (Valid Reverse DNS)")
         plt.axis('off')
         
-        # Save the figure as a PNG file after processing the current subnet
+        # Save the figure as a PNG file
         plt.savefig(f"{subnet_name}.png")
